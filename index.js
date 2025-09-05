@@ -25,37 +25,17 @@ const loadWordDetail = async (id) => {
 
   try {
     const res = await fetch(url);
-    const data = await res.json(); // এখানে data define হলো
-    displyWordDetailes(data.data); // এখন ঠিক আছে
+    const data = await res.json();
+    displyWordDetailes(data.data);
   } catch (error) {
     console.error("Error fetching word detail:", error);
   }
 };
 
-// {
-//   "status": true,
-//   "message": "successfully fetched a word details",
-//   "data": {
-//     "word": "Eager",
-//     "meaning": "আগ্রহী",
-//     "pronunciation": "ইগার",
-//     "level": 1,
-//     "sentence": "The kids were eager to open their gifts.",
-//     "points": 1,
-//     "partsOfSpeech": "adjective",
-//     "synonyms": [
-//       "enthusiastic",
-//       "excited",
-//       "keen"
-//     ],
-//     "id": 5
-//   }
-// }
-
 const displyWordDetailes = (word) => {
   const DetailesBox = document.getElementById("detailes-contenaer");
 
-  DetailesBox.innerHTML = `  <div id="detailes-contenaer">
+  DetailesBox.innerHTML = `<div id="detailes-contenaer">
         <div class="bg-white rounded-xl shadow-md w-80 p-6">
           <h3 class="text-2xl font-bold mb-4">
             <span class="text-orange-500">W</span>
@@ -72,7 +52,7 @@ const displyWordDetailes = (word) => {
             <span class="text-emerald-500">S</span>
           </h3>
           <h2 class="text-3xl font-bold text-gray-900 mb-2">
-          ${word.word}}
+          ${word.word}
             <span class="text-gray-900 text-base"
               >(<i class="fa-solid fa-microphone-lines"></i>: ${word.pronunciation})</span
             >
@@ -118,7 +98,7 @@ const displyWordDetailes = (word) => {
               <button class="btn">Close</button>
             </form>
           </div>
-        </div> `;
+        </div>  `;
   document.getElementById("my_modal_5").showModal();
 };
 const displyWord = (words) => {
