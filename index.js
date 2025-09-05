@@ -19,7 +19,108 @@ const wordConten = (id) => {
       displyWord(data.data);
     });
 };
+const loadWordDetail = async (id) => {
+  const url = `https://openapi.programming-hero.com/api/word/${id}`;
+  console.log("Fetching:", url);
 
+  try {
+    const res = await fetch(url);
+    const data = await res.json(); // এখানে data define হলো
+    displyWordDetailes(data.data); // এখন ঠিক আছে
+  } catch (error) {
+    console.error("Error fetching word detail:", error);
+  }
+};
+
+// {
+//   "status": true,
+//   "message": "successfully fetched a word details",
+//   "data": {
+//     "word": "Eager",
+//     "meaning": "আগ্রহী",
+//     "pronunciation": "ইগার",
+//     "level": 1,
+//     "sentence": "The kids were eager to open their gifts.",
+//     "points": 1,
+//     "partsOfSpeech": "adjective",
+//     "synonyms": [
+//       "enthusiastic",
+//       "excited",
+//       "keen"
+//     ],
+//     "id": 5
+//   }
+// }
+
+const displyWordDetailes = (word) => {
+  const DetailesBox = document.getElementById("detailes-contenaer");
+
+  DetailesBox.innerHTML = `  <div id="detailes-contenaer">
+        <div class="bg-white rounded-xl shadow-md w-80 p-6">
+          <h3 class="text-2xl font-bold mb-4">
+            <span class="text-orange-500">W</span>
+            <span class="text-pink-500">O</span>
+            <span class="text-yellow-500">R</span>
+            <span class="text-green-500">D</span>
+            <span class="text-blue-500">&nbsp;</span>
+            <span class="text-red-500">D</span>
+            <span class="text-purple-500">E</span>
+            <span class="text-teal-500">T</span>
+            <span class="text-indigo-500">A</span>
+            <span class="text-fuchsia-500">I</span>
+            <span class="text-rose-500">L</span>
+            <span class="text-emerald-500">S</span>
+          </h3>
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">
+          ${word.word}}
+            <span class="text-gray-900 text-base"
+              >(<i class="fa-solid fa-microphone-lines"></i>: ${word.pronunciation})</span
+            >
+          </h2>
+
+          <div class="mb-4">
+            <p class="font-semibold text-gray-700">Meaning:</p>
+            <p class="text-gray-800">${word.meaning}</p>
+          </div>
+
+          <div class="mb-4">
+            <p class="font-semibold text-gray-700">Example:</p>
+            <p class="text-gray-800">
+              ${word.sentence}
+            </p>
+          </div>
+
+          <div class="mb-4">
+            <p class="font-semibold text-gray-700">সমার্থক শব্দগুলো:</p>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <span
+                class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                >Enthusiastic</span
+              >
+              <span
+                class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                >Excited</span
+              >
+              <span
+                class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                >Keen</span
+              >
+            </div>
+          </div>
+
+          <button
+            class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-semibold"
+          >
+            Complete Learning
+          </button>
+          <div class="modal-action">
+            <form method="dialog">
+              <button class="btn">Close</button>
+            </form>
+          </div>
+        </div> `;
+  document.getElementById("my_modal_5").showModal();
+};
 const displyWord = (words) => {
   const wordContenar = document.getElementById("word-contenar");
   wordContenar.innerHTML = "";
@@ -78,7 +179,9 @@ const displyWord = (words) => {
       word.pronunciation ? word.pronunciation : "pronunciation পাওয়া যায় নি 😓"
     } "</div>
         <div  class="flex justify-between text-center">
-          <button class="btn bg-sky-50 hover:bg-sky-400">
+          <button  onclick="loadWordDetail(${
+            word.id
+          })" class="btn bg-sky-50 hover:bg-sky-400">
             <i class="fa-solid fa-circle-info"></i>
           </button>
           <button class="btn bg-sky-50 hover:bg-sky-400">
