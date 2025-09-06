@@ -1,3 +1,15 @@
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}
+
+const createElements = (arr) => {
+  if (!arr || arr.length === 0)
+    return `<p class="text-gray-500">No synonyms found</p>`;
+  return arr.map((el) => `<span class="btn">${el}</span>`).join(" ");
+};
+
 const loadLessons = () => {
   fetch("https://openapi.programming-hero.com/api/levels/all")
     .then((res) => res.json())
@@ -54,7 +66,9 @@ const displyWordDetailes = (word) => {
           <h2 class="text-3xl font-bold text-gray-900 mb-2">
           ${word.word}
             <span class="text-gray-900 text-base"
-              >(<i class="fa-solid fa-microphone-lines"></i>: ${word.pronunciation})</span
+              >(<i class="fa-solid fa-microphone-lines"></i>: ${
+                word.pronunciation
+              })</span
             >
           </h2>
 
@@ -72,20 +86,10 @@ const displyWordDetailes = (word) => {
 
           <div class="mb-4">
             <p class="font-semibold text-gray-700">সমার্থক শব্দগুলো:</p>
-            <div class="flex flex-wrap gap-2 mt-2">
-              <span
-                class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-                >Enthusiastic</span
-              >
-              <span
-                class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-                >Excited</span
-              >
-              <span
-                class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-                >Keen</span
-              >
-            </div>
+           <div class="">
+         ${createElements(word.synonyms)}
+
+          </div>
           </div>
 
           <button
@@ -164,7 +168,9 @@ const displyWord = (words) => {
           })" class="btn bg-sky-50 hover:bg-sky-400">
             <i class="fa-solid fa-circle-info"></i>
           </button>
-          <button class="btn bg-sky-50 hover:bg-sky-400">
+          <button onclick="pronounceWord('${
+            word.word
+          }')"  class="btn bg-sky-50 hover:bg-sky-400">
             <i class="fa-solid fa-volume-high"></i>
           </button>
         </div>
@@ -187,3 +193,28 @@ const dispyLesson = (lessons) => {
   }
 };
 loadLessons();
+document.getElementById("btn-search").addEventListener("click", () => {
+  removeActive(); // আগের অ্যাক্টিভ ক্লাস সরানো
+  const input = document.getElementById("input-search");
+  const searchValue = input.value.trim().toLowerCase();
+
+  if (!searchValue) {
+    alert("অনুগ্রহ করে একটি শব্দ লিখুন!");
+    return;
+  }
+
+  fetch("https://openapi.programming-hero.com/api/words/all")
+    .then((res) => res.json())
+    .then((data) => {
+      const allWords = data.data;
+
+      const filteredWords = allWords.filter((word) =>
+        word.word.toLowerCase().includes(searchValue)
+      );
+
+      displyWord(filteredWords); // রেজাল্ট দেখানো
+    })
+    .catch((error) => {
+      console.error("তথ্য আনার সময় সমস্যা হয়েছে:", error);
+    });
+});
